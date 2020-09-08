@@ -1,0 +1,485 @@
+<html>
+
+<head>
+ <style>
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  body {font-family: "Inconsolata";}
+ 
+
+  </style>
+</head>
+
+<body>
+  
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<svg width="560" height="400"></svg>
+<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+
+<div id="chart"></div>
+
+</head>
+
+<script>
+  var data = [
+  {name: "#nasa", value: 816},
+  {name: "#youtube", value: 687},
+  {name: "#barackobama", value: 336},
+  {name: "#gameofthrones", value: 278},
+  {name: "#techcrunch", value: 245},
+  {name: "#avengers", value: 211},
+  {name: "#cnn", value: 209},
+  {name: "#playstation", value: 202},
+
+
+];
+var text = "";
+
+var width = 400;
+var height = 400;
+var thickness = 60;
+var duration = 750;
+
+var radius = Math.min(width, height) / 2;
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var svg = d3.select("#chart")
+.append('svg')
+.attr('class', 'pie')
+.attr('width', width)
+.attr('height', height);
+
+var g = svg.append('g')
+.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
+
+var arc = d3.arc()
+.innerRadius(radius - thickness)
+.outerRadius(radius);
+
+var pie = d3.pie()
+.value(function(d) { return d.value; })
+.sort(null);
+
+var path = g.selectAll('path')
+.data(pie(data))
+.enter()
+.append("g")
+.on("mouseover", function(d) {
+      let g = d3.select(this)
+        .style("cursor", "pointer")
+        .style("fill", "black")
+        .append("g")
+        .attr("class", "text-group");
+
+
+      g.append("text")
+        .attr("class", "name-text")
+        .text(`${d.data.name}`)
+        .attr('text-anchor', 'middle')
+        .attr('dy', '-1.2em');
+  
+      g.append("text")
+        .attr("class", "value-text")
+        .text(`${d.data.value}`)
+        .attr('text-anchor', 'middle')
+        .attr('dy', '.6em');
+    })
+  .on("mouseout", function(d) {
+      d3.select(this)
+        .style("cursor", "none")  
+        .style("fill", color(this._current))
+        .select(".text-group").remove();
+    })
+  .append('path')
+  .attr('d', arc)
+  .attr('fill', (d,i) => color(i))
+  .on("mouseover", function(d) {
+      d3.select(this)     
+        .style("cursor", "pointer")
+        .style("fill", "black");
+    })
+  .on("click", function(d) {
+    if (d.data.name=="#nasa") {
+    }
+
+
+    var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      .force('charge', d3.forceManyBody()
+      .strength(-200)
+      .theta(0.8)
+      .distanceMax(150)
+    )
+//    .force('collide', d3.forceCollide()
+//       .radius(d => 40)
+//       .iterations(2)
+//     )
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+
+const graph = {
+  "nodes": [
+    {"id": "1", "name": "#nasa"},
+    {"id": "2", "name": "#angrybirdsspace"},
+    {"id": "3", "name": "#moonpie"},
+    {"id": "4", "name": "#nasasocial"},
+    {"id": "5", "name": "#nasafuture"},
+    {"id": "6", "name": "#nano"},   
+  ],
+  "links": [
+    {"source": "1", "target": "2", "distance": 200},
+    {"source": "1", "target": "3", "distance": 100},
+    {"source": "1", "target": "4", "distance": 40},
+    {"source": "1", "target": "5", "distance": 50},
+    {"source": "1", "target": "6", "distance": 200},
+  ]
+}
+const gr = {
+  "nodes": [
+    {"id": "1", "name": "#youtube"},
+    {"id": "2", "name": "#youth"},
+    {"id": "3", "name": "#xbox360"},
+    {"id": "4", "name": "#teamwhite"},
+    {"id": "5", "name": "#TED"},
+    {"id": "6", "name": "#zombie"},   
+  ],
+  "links": [
+    {"source": "1", "target": "2", "distance": 200},
+    {"source": "1", "target": "3", "distance": 100},
+    {"source": "1", "target": "4", "distance": 40},
+    {"source": "1", "target": "5", "distance": 100},
+    {"source": "1", "target": "6", "distance": 300},
+
+  ]
+}
+const ba = {
+  "nodes": [
+    {"id": "1", "name": "#barackobama"},
+    {"id": "2", "name": "#obamacare"},
+    {"id": "3", "name": "#nyc"},
+    {"id": "4", "name": "#OWS"},
+    {"id": "5", "name": "#nuclear"},
+    {"id": "6", "name": "#occupy"},   
+  ],
+  "links": [
+    {"source": "1", "target": "2", "distance": 200},
+    {"source": "1", "target": "3", "distance": 300},
+    {"source": "1", "target": "4", "distance": 80},
+    {"source": "1", "target": "5", "distance": 200},
+    {"source": "1", "target": "6", "distance": 100},
+
+  ]
+}
+  
+  
+function run(graph) {
+  
+  graph.links.forEach(function(d){
+//     d.source = d.source_id;    
+//     d.target = d.target_id;
+  });           
+
+  var link = svg.append("g")
+                .style("stroke", "#aaa")
+                .selectAll("line")
+                .data(graph.links)
+                .enter().append("line");
+
+  var node = svg.append("g")
+            .attr("class", "nodes")
+  .selectAll("circle")
+            .data(graph.nodes)
+  .enter().append("circle")
+          .attr("r", 2)
+          .call(d3.drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended));
+  
+  var label = svg.append("g")
+      .attr("class", "labels")
+      .selectAll("text")
+      .data(graph.nodes)
+      .enter().append("text")
+        .attr("class", "label")
+        .text(function(d) { return d.name; });
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links)
+      .distance(function(d) { return d.distance; })
+
+
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+         .attr("r", 20)
+         .style("fill", "#efefef")
+         .style("stroke", "#424242")
+         .style("stroke-width", "3px")
+         .attr("cx", function (d) { return d.x+5; })
+         .attr("cy", function(d) { return d.y-3; });
+    
+    label
+        .attr("x", function(d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+            .style("font-size", "10px").style("fill", "#333");
+  }
+}
+
+function run(gr) {
+
+  gr.links.forEach(function(d){
+//     d.source = d.source_id;    
+//     d.target = d.target_id;
+  });           
+
+  var link = svg.append("g")
+                .style("stroke", "#aaa")
+                .selectAll("line")
+                .data(gr.links)
+                .enter().append("line");
+
+  var node = svg.append("g")
+            .attr("class", "nodes")
+  .selectAll("circle")
+            .data(gr.nodes)
+  .enter().append("circle")
+          .attr("r", 2)
+          .call(d3.drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended));
+  
+  var label = svg.append("g")
+      .attr("class", "labels")
+      .selectAll("text")
+      .data(gr.nodes)
+      .enter().append("text")
+        .attr("class", "label")
+        .text(function(d) { return d.name; });
+
+  simulation
+      .nodes(gr.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(gr.links)
+      .distance(function(d) { return d.distance; })
+
+
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+         .attr("r", 20)
+         .style("fill", "#efefef")
+         .style("stroke", "#424242")
+         .style("stroke-width", "3px")
+         .attr("cx", function (d) { return d.x+5; })
+         .attr("cy", function(d) { return d.y-3; });
+    
+    label
+        .attr("x", function(d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+            .style("font-size", "10px").style("fill", "#333");
+  }
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+  d.fx = d.x
+  d.fy = d.y
+//  simulation.fix(d);
+}
+
+function dragged(d) {
+  d.fx = d3.event.x
+  d.fy = d3.event.y
+//  simulation.fix(d, d3.event.x, d3.event.y);
+}
+
+function dragended(d) {
+  d.fx = d3.event.x
+  d.fy = d3.event.y
+  if (!d3.event.active) simulation.alphaTarget(0);
+  //simulation.unfix(d);
+}
+if (d.data.name=="#youtube") {
+  svg.selectAll("*").remove();
+
+
+  run(gr)
+  
+  .on("mouseout", function(d) {
+      d3.select(this)
+        .style("cursor", "none")  
+        .style("fill", color(this._current));
+    })
+  .each(function(d, i) { this._current = i; });
+
+
+
+g.append('text')
+  .attr('text-anchor', 'middle')
+  . attr('dy', '.35em')
+  .text(text);
+
+d.graph.remove();
+
+
+  
+}
+if (d.data.name=="#barackobama") {
+  svg.selectAll("*").remove();
+
+  run(ba)
+  
+  .on("mouseout", function(d) {
+      d3.select(this)
+        .style("cursor", "none")  
+        .style("fill", color(this._current));
+    })
+  .each(function(d, i) { this._current = i; });
+
+
+
+g.append('text')
+  .attr('text-anchor', 'middle')
+  . attr('dy', '.35em')
+  .text(text);
+
+
+}
+function run(ba) {
+
+  ba.links.forEach(function(d){
+//     d.source = d.source_id;    
+//     d.target = d.target_id;
+  });           
+
+  var link = svg.append("g")
+                .style("stroke", "#aaa")
+                .selectAll("line")
+                .data(ba.links)
+                .enter().append("line");
+
+  var node = svg.append("g")
+            .attr("class", "nodes")
+  .selectAll("circle")
+            .data(ba.nodes)
+  .enter().append("circle")
+          .attr("r", 2)
+          .call(d3.drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended));
+  
+  var label = svg.append("g")
+      .attr("class", "labels")
+      .selectAll("text")
+      .data(ba.nodes)
+      .enter().append("text")
+        .attr("class", "label")
+        .text(function(d) { return d.name; });
+
+  simulation
+      .nodes(ba.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(ba.links)
+      .distance(function(d) { return d.distance; })
+
+
+
+  function ticked() {
+    link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node
+         .attr("r", 20)
+         .style("fill", "#efefef")
+         .style("stroke", "#424242")
+         .style("stroke-width", "3px")
+         .attr("cx", function (d) { return d.x+5; })
+         .attr("cy", function(d) { return d.y-3; });
+    
+    label
+        .attr("x", function(d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+            .style("font-size", "10px").style("fill", "#333");
+  }
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+  d.fx = d.x
+  d.fy = d.y
+//  simulation.fix(d);
+}
+
+function dragged(d) {
+  d.fx = d3.event.x
+  d.fy = d3.event.y
+//  simulation.fix(d, d3.event.x, d3.event.y);
+}
+
+function dragended(d) {
+  d.fx = d3.event.x
+  d.fy = d3.event.y
+  if (!d3.event.active) simulation.alphaTarget(0);
+  //simulation.unfix(d);
+}
+
+     
+run(graph)
+  })
+  .on("mouseout", function(d) {
+      d3.select(this)
+        .style("cursor", "none")  
+        .style("fill", color(this._current));
+    })
+  .each(function(d, i) { this._current = i; });
+
+
+
+g.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('dy', '.35em')
+  .text(text);
+
+
+</script>
+</body>
+</html>
